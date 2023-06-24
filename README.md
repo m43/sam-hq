@@ -94,7 +94,7 @@ export PYTHONPATH=$(pwd)
 Three HQ-SAM model versions of the model are available with different backbone sizes. These models can be instantiated by running
 
 ```
-from segment_anything import sam_model_registry
+from segment_anything_hq import sam_model_registry
 sam = sam_model_registry["<model_type>"](checkpoint="<path/to/checkpoint>")
 ```
 
@@ -113,7 +113,7 @@ Click the links below to download the checkpoint for the corresponding model typ
 First download a [model checkpoint](#model-checkpoints). Then the model can be used in just a few lines to get masks from a given prompt:
 
 ```
-from segment_anything import SamPredictor, sam_model_registry
+from segment_anything_hq import SamPredictor, sam_model_registry
 sam = sam_model_registry["<model_type>"](checkpoint="<path/to/checkpoint>")
 predictor = SamPredictor(sam)
 predictor.set_image(<your_image>)

@@ -2,7 +2,7 @@ import numpy as np
 import torch
 import matplotlib.pyplot as plt
 import cv2
-from segment_anything import sam_model_registry_baseline, SamPredictor
+from segment_anything_hq import sam_model_registry_baseline, SamPredictor
 import os
 
 def show_mask(mask, ax, random_color=False):

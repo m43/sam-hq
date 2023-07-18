@@ -1,5 +1,7 @@
 # Segment Anything in High Quality
 
+[![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/segment-anything-in-high-quality/zero-shot-segmentation-on-segmentation-in-the)](https://paperswithcode.com/sota/zero-shot-segmentation-on-segmentation-in-the?p=segment-anything-in-high-quality)
+
 > [**Segment Anything in High Quality**](https://arxiv.org/abs/2306.01567)           
 > Lei Ke, Mingqiao Ye, Martin Danelljan, Yifan Liu, Yu-Wing Tai, Chi-Keung Tang, Fisher Yu \
 > ETH Zurich & HKUST 
@@ -8,11 +10,21 @@ We propose HQ-SAM to upgrade SAM for high-quality zero-shot segmentation. Refer 
 
 Updates
 -----------------
-:fire::fire: Play with HQ-SAM demo at [![Huggingfaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/sam-hq-team/sam-hq), supported by [Huggingface Spaces](https://huggingface.co/spaces), which supports point, box and text prompts.
+:rocket::rocket: 2023/07/17: We released **Light HQ-SAM** using TinyViT as backbone, for both fast and high-quality zero-shot segmentation, which reaches **41.2 FPS**. Refer to [Light HQ-SAM vs. MobileSAM](#light-hq-sam-vs-mobilesam-on-coco) for more details.
 
-:fire: We released the [colab notebook demo](https://colab.research.google.com/drive/1QwAbn5hsdqKOD5niuBzuqQX4eLCbNKFL?usp=sharing) and [automatic mask generator notebook](https://colab.research.google.com/drive/1dhRq4eR6Fbl-yl1vbQvU9hqyyeOidQaU?usp=sharing).
+:trophy::1st_place_medal: 2023/07/14: Grounded **HQ-SAM** obtains the **first place**:1st_place_medal: in the [Segmentation in the Wild](https://eval.ai/web/challenges/challenge-page/1931/leaderboard/4567) competition on zero-shot track (hosted in [CVPR 2023 workshop](https://computer-vision-in-the-wild.github.io/cvpr-2023/)), outperforming Grounded SAM. Refer to our [SegInW evaluation](#grounded-hq-sam-vs-grounded-sam-on-seginw) for more details.
 
-:fire: We released the [model checkpoints](#model-checkpoints) and [demo visualization codes](#getting-started).
+:fire::fire: 2023/07/05: We released [SAM tuning instuctions](#hq-sam-tuning-and-hq-seg44k-data) and [HQSeg-44K data](#hq-sam-tuning-and-hq-seg44k-data).
+
+2023/07/04: HQ-SAM is adopted in [SAM-PT](https://github.com/SysCV/sam-pt) to improve the SAM-based zero-shot video segmentation performance. Also, HQ-SAM is used in [Grounded-SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) and [Inpaint Anything](https://github.com/Uminosachi/sd-webui-inpaint-anything).
+
+2023/06/28: We released the [ONNX export script](#onnx-export) and [colab notebook](https://colab.research.google.com/drive/11U2La49c2IxahzJkAV-EzPqEH3cz_5hq?usp=sharing) for exporting and using ONNX model.
+
+2023/06/23: Play with HQ-SAM demo at [![Huggingfaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/sam-hq-team/sam-hq), which supports point, box and text prompts.
+
+2023/06/14: We released the [colab notebook demo](https://colab.research.google.com/drive/1QwAbn5hsdqKOD5niuBzuqQX4eLCbNKFL?usp=sharing) and [automatic mask generator notebook](https://colab.research.google.com/drive/1dhRq4eR6Fbl-yl1vbQvU9hqyyeOidQaU?usp=sharing).
+
+2023/06/13: We released the [model checkpoints](#model-checkpoints) and [demo visualization codes](#getting-started).
 
 Visual comparison between SAM and HQ-SAM
 -----------------
@@ -38,10 +50,12 @@ The recent Segment Anything Model (SAM) represents a big leap in scaling up segm
 
 <img width="1096" alt="image" src='figs/sam-hf-framework.png'>
 
-
 Quantitative comparison between SAM and HQ-SAM
 -----------------
-Note: For box-prompting-based evaluation, we feed SAM and our HQ-SAM with the same image/video bounding boxes and adopt the single mask output mode of SAM. 
+Note: For box-prompting-based evaluation, we feed SAM, MobileSAM and our HQ-SAM with the same image/video bounding boxes and adopt the single mask output mode of SAM. 
+
+We provide comprehensive performance, model size and speed comparison on SAM variants:
+<img width="1096" alt="image" src='figs/sam_variants_comp.png'>
 
 ### Various ViT backbones on COCO:
 ![backbones](figs/sam_vs_hqsam_backbones.png)
@@ -72,7 +86,7 @@ cd sam-hq; pip install -e .
 The following optional dependencies are necessary for mask post-processing, saving masks in COCO format, the example notebooks, and exporting the model in ONNX format. `jupyter` is also required to run the example notebooks.
 
 ```
-pip install opencv-python pycocotools matplotlib onnxruntime onnx
+pip install opencv-python pycocotools matplotlib onnxruntime onnx timm
 ```
 
 ### Example conda environment setup
@@ -80,7 +94,7 @@ pip install opencv-python pycocotools matplotlib onnxruntime onnx
 conda create --name sam_hq python=3.8 -y
 conda activate sam_hq
 conda install pytorch==1.10.0 torchvision==0.11.0 cudatoolkit=11.1 -c pytorch -c nvidia
-pip install opencv-python pycocotools matplotlib onnxruntime onnx
+pip install opencv-python pycocotools matplotlib onnxruntime onnx timm
 
 # under your working directory
 git clone https://github.com/SysCV/sam-hq.git
@@ -107,6 +121,7 @@ Click the links below to download the checkpoint for the corresponding model typ
 - `vit_b`: [ViT-B HQ-SAM model.](https://drive.google.com/file/d/11yExZLOve38kRZPfRx_MRxfIAKmfMY47/view?usp=sharing)
 - `vit_l`: [ViT-L HQ-SAM model.](https://drive.google.com/file/d/1Uk17tDKX1YAKas5knI4y9ZJCo0lRVL0G/view?usp=sharing)
 - `vit_h`: [ViT-H HQ-SAM model.](https://drive.google.com/file/d/1qobFYrI4eyIANfBSmYcGuWRaSIXfMOQ8/view?usp=sharing)
+- `vit_tiny` (**Light HQ-SAM** for real-time need): [ViT-Tiny HQ-SAM model.](https://huggingface.co/lkeab/hq-sam/resolve/main/sam_hq_vit_tiny.pth)
 
 ### **Getting Started**
 
@@ -132,6 +147,111 @@ To obtain baseline SAM's visual result. Note that you need to download original 
 python demo/demo_sam.py
 ```
 
+To obtain Light HQ-SAM's visual result:
+```
+python demo/demo_hqsam_light.py
+```
+
+### **HQ-SAM Tuning and HQ-Seg44k Data**
+We provide detailed training, evaluation, visualization and data downloading instructions in [HQ-SAM training](train/README.md).
+
+Please change the current folder path to:
+```
+cd train
+```
+and then refer to detailed [readme instruction](train/README.md).
+
+### **Grounded HQ-SAM vs Grounded SAM on [SegInW](https://eval.ai/web/challenges/challenge-page/1931/overview?ref=blog.roboflow.com)**
+
+Grounded HQ-SAM wins the **first place**:1st_place_medal: on SegInW benchmark (consist of 25 public zero-shot in the wild segmentation datasets), and outpuerforming Grounded SAM using the same grounding-dino detector.
+
+<table><tbody>
+<!-- START TABLE -->
+<!-- TABLE HEADER -->
+<th valign="bottom">Model Name</th>
+<th valign="bottom">Encoder</th>
+<th valign="bottom">GroundingDINO</th>
+<th valign="bottom">Mean AP</th>
+<th valign="bottom">Evaluation Script</th>
+<th valign="bottom">Log</th>
+<th valign="bottom">Output Json</th>
+<!-- TABLE BODY -->
+<!-- ROW: maskformer2_R50_bs16_50ep -->
+ <tr><td align="left">Grounded SAM</td>
+<td align="center">vit-h</td>
+<td align="center">swin-b</td>
+<td align="center">48.7</td>
+<td align="center"><a href="seginw/test_seginw.sh">script</a></td>
+<td align="center"><a href="seginw/logs/grounded_sam.log">log</a></td>
+<td align="center"><a href="https://huggingface.co/sam-hq-team/SegInW/resolve/main/result/grounded_sam.zip">result</a></td>
+</tr>
+<!-- ROW: maskformer2_R101_bs16_50ep -->
+ <tr><td align="left">Grounded HQ-SAM</td>
+<td align="center">vit-h</td>
+<td align="center">swin-b</td>
+<td align="center"><b>49.6</b></td>
+<td align="center"><a href="seginw/test_seginw_hq.sh">script</a></td>
+<td align="center"><a href="seginw/logs/grounded_hqsam.log">log</a></td>
+<td align="center"><a href="https://huggingface.co/sam-hq-team/SegInW/resolve/main/result/grounded_hqsam.zip">result</a></td>
+</tr>
+</tbody></table>
+
+Please change the current folder path to:
+```
+cd seginw
+```
+We provide detailed evaluation instructions and metrics on SegInW in [Grounded-HQ-SAM evaluation](seginw/README.md).
+
+### **Light HQ-SAM vs MobileSAM on COCO**
+We propose [Light HQ-SAM](#model-checkpoints) based on the tiny vit image encoder provided by MobileSAM. We provide quantitative comparison on zero-shot COCO performance, speed and memory below. Try Light HQ-SAM at [here](#getting-started).
+
+<table><tbody>
+<!-- START TABLE -->
+<!-- TABLE HEADER -->
+<th valign="bottom">Model</th>
+<th valign="bottom">Encoder</th>
+<th valign="bottom">AP</th>
+<th valign="bottom">AP@L</th>
+<th valign="bottom">AP@M</th>
+<th valign="bottom">AP@S</th>
+<th valign="bottom">Model Params (MB)</th>
+<th valign="bottom">FPS</th>
+<th valign="bottom">Memory (GB)</th>
+<!-- TABLE BODY -->
+<!-- ROW: maskformer2_R50_bs16_50ep -->
+ <tr><td align="left">MobileSAM</td>
+<td align="center">TinyViT</td>
+<td align="center">42.4</td>
+<td align="center">58.5</td>
+<td align="center">46.0</td>
+<td align="center">28.1</td>
+<td align="center">38.6</td>
+<td align="center">44.8</td>
+<td align="center">3.7</td>
+</tr>
+<!-- ROW: maskformer2_R101_bs16_50ep -->
+ <tr><td align="left"><b>Light HQ-SAM</b></td>
+ <td align="center">TinyViT</td>
+<td align="center"><b>43.3</b></td>
+<td align="center">59.4</td>
+<td align="center">47.1</td>
+<td align="center">28.5</td>
+<td align="center">40.3</td>
+<td align="center">41.2</td>
+<td align="center">3.7</td>
+</tr>
+</tbody></table>
+
+Note: For the COCO dataset, we use the same SOTA detector FocalNet-DINO trained on the COCO dataset as our and Mobile sam's box prompt generator.
+
+
+### **ONNX export**
+HQ-SAM's lightweight mask decoder can be exported to ONNX format so that it can be run in any environment that supports ONNX runtime. Export the model with
+```
+python scripts/export_onnx_model.py --checkpoint <path/to/checkpoint> --model-type <model_type> --output <path/to/output>
+```
+See the [example notebook](https://colab.research.google.com/drive/11U2La49c2IxahzJkAV-EzPqEH3cz_5hq?usp=sharing) for details on how to combine image preprocessing via HQ-SAM's backbone with mask prediction using the ONNX model. It is recommended to use the latest stable version of PyTorch for ONNX export.
+
 
 Citation
 ---------------
@@ -146,4 +266,4 @@ If you find HQ-SAM useful in your research or refer to the provided baseline res
 ```
 
 ## Acknowledgments
-- Thanks [SAM](https://github.com/facebookresearch/segment-anything) for their public code and released models.
+- Thanks [SAM](https://github.com/facebookresearch/segment-anything), [Grounded SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) and [MobileSAM](https://github.com/ChaoningZhang/MobileSAM) for their public code and released models.

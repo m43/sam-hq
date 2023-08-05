@@ -1,6 +1,10 @@
 # Segment Anything in High Quality
 
 [![PWC](https://img.shields.io/endpoint.svg?url=https://paperswithcode.com/badge/segment-anything-in-high-quality/zero-shot-segmentation-on-segmentation-in-the)](https://paperswithcode.com/sota/zero-shot-segmentation-on-segmentation-in-the?p=segment-anything-in-high-quality)
+<a href="https://colab.research.google.com/drive/1QwAbn5hsdqKOD5niuBzuqQX4eLCbNKFL?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a>
+[![Huggingfaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/sam-hq-team/sam-hq)
+[![Open in OpenXLab](https://cdn-static.openxlab.org.cn/app-center/openxlab_app.svg)](https://openxlab.org.cn/apps/detail/keleiwhu/sam-hq)
+
 
 > [**Segment Anything in High Quality**](https://arxiv.org/abs/2306.01567)           
 > Lei Ke, Mingqiao Ye, Martin Danelljan, Yifan Liu, Yu-Wing Tai, Chi-Keung Tang, Fisher Yu \
@@ -10,19 +14,23 @@ We propose HQ-SAM to upgrade SAM for high-quality zero-shot segmentation. Refer 
 
 Updates
 -----------------
+2023/07/25: Light HQ-SAM is in [EfficientSAM series](https://github.com/IDEA-Research/Grounded-Segment-Anything/tree/main/EfficientSAM) combining with [Grounded SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything/), thanks the support!
+
+2023/07/21: HQ-SAM is also in OpenXLab apps, thanks their support!
+
 :rocket::rocket: 2023/07/17: We released **Light HQ-SAM** using TinyViT as backbone, for both fast and high-quality zero-shot segmentation, which reaches **41.2 FPS**. Refer to [Light HQ-SAM vs. MobileSAM](#light-hq-sam-vs-mobilesam-on-coco) for more details.
 
 :trophy::1st_place_medal: 2023/07/14: Grounded **HQ-SAM** obtains the **first place**:1st_place_medal: in the [Segmentation in the Wild](https://eval.ai/web/challenges/challenge-page/1931/leaderboard/4567) competition on zero-shot track (hosted in [CVPR 2023 workshop](https://computer-vision-in-the-wild.github.io/cvpr-2023/)), outperforming Grounded SAM. Refer to our [SegInW evaluation](#grounded-hq-sam-vs-grounded-sam-on-seginw) for more details.
 
 :fire::fire: 2023/07/05: We released [SAM tuning instuctions](#hq-sam-tuning-and-hq-seg44k-data) and [HQSeg-44K data](#hq-sam-tuning-and-hq-seg44k-data).
 
-2023/07/04: HQ-SAM is adopted in [SAM-PT](https://github.com/SysCV/sam-pt) to improve the SAM-based zero-shot video segmentation performance. Also, HQ-SAM is used in [Grounded-SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything) and [Inpaint Anything](https://github.com/Uminosachi/sd-webui-inpaint-anything).
+2023/07/04: HQ-SAM is adopted in [SAM-PT](https://github.com/SysCV/sam-pt) to improve the SAM-based zero-shot video segmentation performance. Also, HQ-SAM is used in [Grounded-SAM](https://github.com/IDEA-Research/Grounded-Segment-Anything), [Inpaint Anything](https://github.com/Uminosachi/sd-webui-inpaint-anything) and [HQTrack](https://github.com/jiawen-zhu/HQTrack) (2nd in VOTS 2023).
 
 2023/06/28: We released the [ONNX export script](#onnx-export) and [colab notebook](https://colab.research.google.com/drive/11U2La49c2IxahzJkAV-EzPqEH3cz_5hq?usp=sharing) for exporting and using ONNX model.
 
 2023/06/23: Play with HQ-SAM demo at [![Huggingfaces](https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue)](https://huggingface.co/spaces/sam-hq-team/sam-hq), which supports point, box and text prompts.
 
-2023/06/14: We released the [colab notebook demo](https://colab.research.google.com/drive/1QwAbn5hsdqKOD5niuBzuqQX4eLCbNKFL?usp=sharing) and [automatic mask generator notebook](https://colab.research.google.com/drive/1dhRq4eR6Fbl-yl1vbQvU9hqyyeOidQaU?usp=sharing).
+2023/06/14: We released the [colab demo](https://colab.research.google.com/drive/1QwAbn5hsdqKOD5niuBzuqQX4eLCbNKFL?usp=sharing) <a href="https://colab.research.google.com/drive/1QwAbn5hsdqKOD5niuBzuqQX4eLCbNKFL?usp=sharing"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"></a> and [automatic mask generator notebook](https://colab.research.google.com/drive/1dhRq4eR6Fbl-yl1vbQvU9hqyyeOidQaU?usp=sharing).
 
 2023/06/13: We released the [model checkpoints](#model-checkpoints) and [demo visualization codes](#getting-started).
 
@@ -153,7 +161,7 @@ python demo/demo_hqsam_light.py
 ```
 
 ### **HQ-SAM Tuning and HQ-Seg44k Data**
-We provide detailed training, evaluation, visualization and data downloading instructions in [HQ-SAM training](train/README.md).
+We provide detailed training, evaluation, visualization and data downloading instructions in [HQ-SAM training](train/README.md). You can also replace our training data to obtain your own SAM in specific application domain (like medical, OCR and remote sensing).
 
 Please change the current folder path to:
 ```
@@ -221,10 +229,10 @@ We propose [Light HQ-SAM](#model-checkpoints) based on the tiny vit image encode
 <!-- ROW: maskformer2_R50_bs16_50ep -->
  <tr><td align="left">MobileSAM</td>
 <td align="center">TinyViT</td>
-<td align="center">42.4</td>
-<td align="center">58.5</td>
-<td align="center">46.0</td>
-<td align="center">28.1</td>
+<td align="center">44.3</td>
+<td align="center">61.8</td>
+<td align="center">48.1</td>
+<td align="center">28.8</td>
 <td align="center">38.6</td>
 <td align="center">44.8</td>
 <td align="center">3.7</td>
@@ -232,10 +240,10 @@ We propose [Light HQ-SAM](#model-checkpoints) based on the tiny vit image encode
 <!-- ROW: maskformer2_R101_bs16_50ep -->
  <tr><td align="left"><b>Light HQ-SAM</b></td>
  <td align="center">TinyViT</td>
-<td align="center"><b>43.3</b></td>
-<td align="center">59.4</td>
-<td align="center">47.1</td>
-<td align="center">28.5</td>
+<td align="center"><b>45.0</b></td>
+<td align="center">62.8</td>
+<td align="center">48.8</td>
+<td align="center">29.2</td>
 <td align="center">40.3</td>
 <td align="center">41.2</td>
 <td align="center">3.7</td>
